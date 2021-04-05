@@ -19,4 +19,4 @@ This step is not a must, but the project already implements the required api cal
 
 ## Goal
 
-To demonstrate The capability of Provisional Push Notifications Acess, which gives us developer a "grace" access for Local and Push Notifications even without explicitly asking the user for Permissions.
+To demonstrate The capability of Provisional Local/Push Notifications Acess, which gives us developer a "grace" access for Local and Push Notifications even without explicitly asking the user for Permissions.
