@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Codable {
+struct User: Restable {
     var userName: String?
     var token: String?
     
@@ -16,20 +16,9 @@ struct User: Codable {
     }
 
     init?(json: Data?) {
-        let decoder = JSONDecoder()
-        guard let data = json else {
-            return nil
-        }
-        guard let object = try? decoder.decode(User.self, from: data) else {
-            return nil
-        }
+        guard let data = json else { return nil }
+        guard let object = try? User.fromJson(User.self, data: data) else { return nil }
         
         self = object
-    }
-    
-    func toJson() throws -> Data {        
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        return try encoder.encode(self)
     }
 }

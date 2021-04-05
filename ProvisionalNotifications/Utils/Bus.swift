@@ -7,6 +7,9 @@
 
 import Foundation
 
+
+typealias BusUnsubscreibe = () -> Void
+/// Conveniece Wrapper For NotificationCenter
 struct Bus {
     enum Event: String {
         case UserUpdate
@@ -15,7 +18,8 @@ struct Bus {
     static let shared = Bus()
     private init() {}
     
-    func on(event: Bus.Event, cb: (@escaping (_ notif: Notification) -> Void)) -> () -> Void {
+    /// Registers a new Event Listener and returns the Unscubscriber method
+    func on(event: Bus.Event, cb: (@escaping (_ notif: Notification) -> Void)) -> BusUnsubscreibe {
         let observer = NotificationCenter.default.addObserver(forName: NSNotification.Name(event.rawValue), object: nil, queue: nil, using: cb)
         
         return {
@@ -23,6 +27,7 @@ struct Bus {
         }
     }
     
+    /// Posts an Event with optional data and info
     func post(event: Bus.Event, data: Any? = nil, info: [AnyHashable: Any]? = nil) {
         NotificationCenter.default.post(name: NSNotification.Name(event.rawValue), object: data, userInfo: info)
     }

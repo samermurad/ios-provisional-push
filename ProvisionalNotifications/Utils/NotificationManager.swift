@@ -9,37 +9,48 @@ import Foundation
 import UserNotifications
 import UIKit
 
+
+typealias GrantCb = (_ didGrant: Bool) -> Void
+
 class NotificationManager {
     /* Singleton */
     static let instance = NotificationManager()
     
     private init() {}
     
-    
+    /// Fire and Forget, Auto Provisional Access
     func registerProvisionalAccess() {
-        self.requestFullAccess { didGrant in
-            print(didGrant)
+        self.provisionalAccess { didGrant in
+            print("did get provisional access: ", didGrant)
         }
-        UIApplication.shared.registerForRemoteNotifications()
     }
-    func requestFullAccess(_ cb: @escaping (_ didGrant: Bool) -> Void) -> Void {
+    
+    func requestAccess(options: UNAuthorizationOptions, cb: GrantCb?) {
         DispatchQueue.global(qos: DispatchQoS.QoSClass.default).async {
             let center = UNUserNotificationCenter.current()
             DispatchQueue.main.async {
-                center.requestAuthorization(options: [.alert, .badge, .sound, .provisional]) { (didGrant, error) in
+                center.requestAuthorization(options: options) { (didGrant, error) in
                     if error != nil {
                         print("An error occured", error ?? "no error")
-                        cb(false)
+                        cb?(false)
                     } else {
-                        cb(true)
+                        cb?(true)
                     }
                 }
             }
         }
     }
+
+    
+    func provisionalAccess( _ cb: GrantCb?) {
+        self.requestAccess(options: [.alert, .sound, .badge, .provisional], cb: cb)
+    }
+    func explicitAccess(_ cb: GrantCb?) {
+        self.requestAccess(options: [.alert, .sound, .badge], cb: cb)
+    }
     
     func loacalNotification(message: String, after: TimeInterval = 5, handler: ((_ error: Error?) -> Void)? = nil) {
-        self.requestFullAccess { (didGrant) in
+        self.provisionalAccess { (didGrant) in
             if didGrant {
                 DispatchQueue.main.async {
                     let notifId = UUID().uuidString

@@ -19,17 +19,38 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="381-hP-aXb">
                                 <rect key="frame" x="0.0" y="5" width="414" height="896"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unset" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6P2-M9-3A1">
-                                        <rect key="frame" x="184.5" y="0.0" width="45.5" height="448"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UserName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6P2-M9-3A1">
+                                        <rect key="frame" x="166.5" y="0.0" width="81" height="179"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r2D-gL-V1m">
+                                        <rect key="frame" x="104" y="179" width="206" height="179.5"/>
+                                        <state key="normal" title="Local Notification After 5 secs"/>
+                                        <connections>
+                                            <action selector="localNotificationAfter5Secs:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vq9-sg-Rir"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QwB-U2-WdV">
+                                        <rect key="frame" x="96.5" y="358.5" width="221" height="179"/>
+                                        <state key="normal" title="Remote Notification after 5 secs"/>
+                                        <connections>
+                                            <action selector="remoteNotificationAfter5Secs:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3iG-he-VH0"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lnq-Ho-m7x">
+                                        <rect key="frame" x="110.5" y="537.5" width="193" height="179.5"/>
+                                        <state key="normal" title="Ask For Explicit notifications"/>
+                                        <connections>
+                                            <action selector="explicitNotificationsAccess:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qsq-Sc-pTi"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dUc-Tv-uaC">
-                                        <rect key="frame" x="94.5" y="448" width="225" height="448"/>
+                                        <rect key="frame" x="94.5" y="717" width="225" height="179"/>
                                         <state key="normal" title="Activate Provisional Notifications"/>
                                         <connections>
-                                            <action selector="notificationAct:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FZw-au-ef4"/>
+                                            <action selector="implicitNotificationAccess:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ct7-FJ-WjQ"/>
                                         </connections>
                                     </button>
                                 </subviews>

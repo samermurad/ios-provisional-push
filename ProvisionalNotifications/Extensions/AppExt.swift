@@ -8,6 +8,9 @@
 import UIKit
 
 extension UIApplication {
+    /// Convenience method to get current topViewController
+    /// Cuation: UIApplication.shared.keyWindow is deprecated since iOS 13
+    /// But this is irrelevant for us in our scenario because we do not implement multiple windows
     class func topViewController(_ base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
 
         if let nav = base as? UINavigationController {
@@ -29,6 +32,11 @@ extension UIApplication {
         }
 
         return base
+    }
+    
+    /// Convenience Method to get AppDelegate from static UIApplication Object
+    class func AppDelegate() -> AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
     }
 }
 

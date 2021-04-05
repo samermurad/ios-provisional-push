@@ -8,12 +8,14 @@
 import Foundation
 
 
+/// Basic Implementation For Localstorage using UserDefaults
 class LocalStorage {
     /* Singleton */
     static let instance = LocalStorage()
     private init() {}
     
     
+    /// Set/Get Persistent UserName (__username__)
     var userName: String? {
         get {
             return UserDefaults.standard.string(forKey: "__username__")
@@ -24,7 +26,8 @@ class LocalStorage {
         }
     }
     
-    
+    /// Convenience method for increamenting Ints by a specified Key
+    /// Key is created and set to 1 if didn't exist
     func increment(key: String) -> Int {
         let data = UserDefaults.standard
         let num = data.integer(forKey: key)

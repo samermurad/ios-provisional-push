@@ -15,26 +15,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UNUserNotificationCenter.current().delegate = self
-        NotificationManager.instance.registerProvisionalAccess()
+        /// Uncomment to auto init provisional push
+        // NotificationManager.instance.registerProvisionalAccess()
+        
+        /// Register App for remote notifications
+        UIApplication.shared.registerForRemoteNotifications()
         return true
     }
 
+    /// Convenience App Wide Alert Method
     func alert(_ title: String, _ msg: String? = nil) {
         DispatchQueue.main.async {
             let cnt = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-            cnt.addAction(UIAlertAction(title: "Ok", style: .default, handler: { act in
-                cnt.dismiss(animated: true, completion: nil)
+            cnt.addAction(UIAlertAction(title: "Ok", style: .default, handler: { [weak cnt] act in
+                cnt?.dismiss(animated: true, completion: nil)
             }))
             
-            guard let vc = UIApplication.topViewController() else {
-                return
-            }
+            guard let vc = UIApplication.topViewController() else { return }
             
             vc.present(cnt, animated: true, completion: nil)
         }
     }
 
+    /// Parse Device Token to Hash String (Hexa)
+    func stringFromDeviceToke(token: Data) -> String? {
+        if token.count == 0 { return nil }
+        var str = ""
+        for i in 0 ..< token.count {
+            str += String(format: "%02x", token[i])
+        }
+        return str
+    }
 
+    /// Upon Registration Success, parse Token and send to server
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         guard let token = stringFromDeviceToke(token: deviceToken) else { return }
         var usr = User(token: token)
@@ -44,6 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 print("Error", error as Any)
             } else {
                 if let usrName = user?.userName {
+                    /// Successfull registration returns a newly generated userName
+                    /// Save userName in LocalStroage and Post a bus for .UserUpdate (to Update UI)
                     LocalStorage.instance.userName = usrName
                     Bus.shared.post(event: .UserUpdate)
                 }
@@ -52,21 +67,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
     
-    func stringFromDeviceToke(token: Data) -> String? {
-        if token.count == 0 { return nil }
-        var str = ""
-        for i in 0 ..< token.count {
-            str += String(format: "%02x", token[i])
-        }
-        return str
-    }
-    
+    /// Implement Basic willPresentNotification to handle Local/Remote Notifications while app is in foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .list])
         self.alert(notification.request.content.title, notification.request.content.body)
     }
     
     // MARK: UISceneSession Lifecycle
+    /// Default untouched implementation
 
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
